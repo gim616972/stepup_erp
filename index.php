@@ -80,36 +80,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                         $TotalPurchase = 0;
                         $CashInhand = 0;
                         if (isset($_GET['from']) && isset($_GET['to'])) {
-                            $fromDateRaw = $_GET['from'] ?? null;
-                            $toDateRaw   = $_GET['to'] ?? null;
-                            $fromDate    = date('M d, Y', strtotime($fromDateRaw));
-                            $toDate      = date('M d, Y', strtotime($toDateRaw));
-
-                            // order count
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE member_id = :member_id && date_created BETWEEN :fromDate AND :toDate");
-                            $stmt->execute([":member_id"=>$ac_user, ":fromDate"=>"$fromDate 12:00 AM", ":toDate"=>"$toDate 11:59 PM"]);
-                            $orderData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            $OrderCount += count($orderData);
                             
-                            // slase amount
-                            $stmt = $conn->prepare("SELECT SUM(total) AS salse FROM tbl_orders WHERE member_id = :member_id && date_created BETWEEN :fromDate AND :toDate");
-                            $stmt->execute([":member_id"=>$ac_user, ":fromDate"=>"$fromDate 12:00 AM", ":toDate"=>"$toDate 11:59 PM"]);
-                            $salseData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            foreach ($salseData as $salseDatas) {
-                                $SalesAmount += $salseDatas['salse'];
-                            }
-                            
-                            // cancelled order
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id && date_created BETWEEN :fromDate AND :toDate");
-                            $stmt->execute([":status"=>8, ":member_id"=>$ac_user, ":fromDate"=>"$fromDate 12:00 AM", ":toDate"=>"$toDate 11:59 PM"]);
-                            $cancellData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            $CancelledOrder += count($cancellData);
-                            
-                            // returned order
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id && date_created BETWEEN :fromDate AND :toDate");
-                            $stmt->execute([":status"=>7, ":member_id"=>$ac_user, ":fromDate"=>"$fromDate 12:00 AM", ":toDate"=>"$toDate 11:59 PM"]);
-                            $returnData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            $ReturnedOrder += count($returnData);
                         } else if (isset($_GET['all'])) {
                             // order count
                             $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE member_id = :member_id");
@@ -138,32 +109,33 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             $ReturnedOrder += count($returnData);
                             
                         } else {
-                            $dateTime = new DateTime();
-                            $formattedDate = $dateTime->format('M d, Y');
-
+                            $inputDate = '2024-10-16';
+                            $dateTime = new DateTime($inputDate);
+                            $formattedDate = $dateTime->format('M d, Y  g:i A');
+                            echo $formattedDate;
                             // order count
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE member_id = :member_id && date_created LIKE :date");
-                            $stmt->execute([":member_id"=>$ac_user, ":date"=>"$formattedDate%"]);
+                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE member_id = :member_id && date_created BETWEEN :date AND :date");
+                            $stmt->execute([":member_id"=>$ac_user, ":date"=>$formattedDate]);
                             $orderData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $OrderCount += count($orderData);
                             
                             // slase amount
-                            $stmt = $conn->prepare("SELECT SUM(total) AS salse FROM tbl_orders WHERE member_id = :member_id && date_created LIKE :date");
-                            $stmt->execute([":member_id"=>$ac_user, ":date"=>"$formattedDate%"]);
+                            $stmt = $conn->prepare("SELECT SUM(total) AS salse FROM tbl_orders WHERE member_id = :member_id");
+                            $stmt->execute([":member_id"=>$ac_user]);
                             $salseData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             foreach ($salseData as $salseDatas) {
                                 $SalesAmount += $salseDatas['salse'];
                             }
                             
                             // cancelled order
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id && date_created LIKE :date");
-                            $stmt->execute([":status"=>8, ":member_id"=>$ac_user, ":date"=>"$formattedDate%"]);
+                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id");
+                            $stmt->execute([":status"=>8, ":member_id"=>$ac_user]);
                             $cancellData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $CancelledOrder += count($cancellData);
                             
                             // returned order
-                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id && date_created LIKE :date");
-                            $stmt->execute([":status"=>7, ":member_id"=>$ac_user, ":date"=>"$formattedDate%"]);
+                            $stmt = $conn->prepare("SELECT * FROM tbl_orders WHERE status = :status && member_id = :member_id");
+                            $stmt->execute([":status"=>7, ":member_id"=>$ac_user]);
                             $returnData = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $ReturnedOrder += count($returnData);
                         }

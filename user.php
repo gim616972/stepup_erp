@@ -14,7 +14,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
 
     if (hasPermission($ac_username, $ac_user, "add_user", $conn)) {
 ?>
-    <!--modal-->
+    <!--modal start-->
     <div class="modal fade modal-lg" id="modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-0">
@@ -54,7 +54,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
             </div>
         </div>
     </div>
-    <!--modal-->
+    <!--modal end-->
     <?php } ?>
     <!--user promt modal-->
     <div class="modal fade modal-lg" id="promt_modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">

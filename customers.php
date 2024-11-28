@@ -14,7 +14,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
     
     if (hasPermission($ac_username, $ac_user, "add_customer", $conn)) {
 ?>
-    <!--modal-->
+    <!--modal start-->
     <div class="modal fade modal-lg" id="modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-0">
@@ -28,7 +28,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                         <h4 class="">Add Customer</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST" class="mb-1">
+                    <f  orm method="POST" class="mb-1">
                         <div class="alert alert-warning err_modal" style="display:none;" role="alert"></div>
                         <div class="mb-2">
                             <label for="cm_phone" class="form-label">Phone Number</label>
@@ -61,13 +61,36 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                         <div class="d-flex justify-content-end pt-2">
                             <button type="button" id="add_customer" class="btn btn-primary text-white rounded-0">Add Customer</button>
                         </div>
+                    </f>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--modal end-->
+    <?php } ?>
+    <!--user promt modal start-->
+    <div class="modal fade modal-lg" id="customer_promt_modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="promt_cog_load h-100 w-100" style="display: none; position: absolute;background: rgb(0, 0, 0, 0.1);z-index: 1;">
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i>
+                    </div>
+                </div>
+                <div class="modal-body px-5 pt-5">
+                    <div class="d-flex justify-content-between pb-3">
+                        <h4 class="action_title"></h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" id="serializeFormData">
+                        <div class="alert alert-warning promt_err_modal" style="display:none;" role="alert"></div>
+                        <div id="customer_promt_data"></div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <!--modal-->
-    <?php } ?>
+    <!--user promt modal end-->
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -224,6 +247,64 @@ include "footer.php";
                 success: function(data) {
                     $(".cog_load").hide();
                     $(".err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+
+        // === edit Customer data start =====
+
+        //show data
+        $(document).on('click', '#editCustomer', function(){
+            var uid = $(this).attr('uid');
+            $(".action_title").html('Edit Customer');
+            $("#customer_promt_data").html("");
+            $("#customer_promt_modal_data").modal('show');
+            $(".promt_cog_load").show();
+            $.ajax({
+                url: 'query/get_customer',
+                method: 'POST',
+                data: {"edit_customer_promt":"edit_customer_promt", "uid":uid},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $("#customer_promt_data").html(data);
+                }
+            });
+        });
+
+        //save changes
+        $(document).on('click', "#edit_customer_Data", function(){
+            const edit_id       = $("#user_id").val();
+            const edit_name     = $("#edit_name").val();
+            const edit_phone    = $("#edit_phone").val();
+            const edit_email    = $("#edit_email").val();
+            const edit_address  = $("#edit_address").val();
+
+            $.ajax({
+                url: "query/get_customer",
+                method: 'POST',
+                data: {"edit_customer_changes": "edit_customer_changes", "edit_id": edit_id, "edit_name": edit_name, "edit_phone": edit_phone, "edit_email": edit_email, "edit_address": edit_address},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $(".promt_err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+
+        // ==== edit Customer data end ====
+
+        //delete customer data
+        $(document).on('click', "#deleteCustomer", function(){
+            const uid = $(this).attr('uid');
+            $.ajax({
+                url: 'query/get_customer',
+                method: 'POST',
+                data: {"delete_customer":"delete_customer", "uid":uid},
+                success: function(data) {
+                    if (data === "success") {
+                        alert ("User deleted successfully !");
+                    } else {
+                        alert(data);
+                    }
                 }
             });
         });

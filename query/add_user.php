@@ -101,7 +101,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                 if ($delUser) {
                     echo "success";
                 } else {
-                    echo "Failed to delet user !";
+                    echo "Failed to delete user !";
                 }
             } else {
                 echo "All fields are required !";

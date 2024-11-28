@@ -84,6 +84,29 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
     </div>
     <!--modal-->
     <?php } ?>
+    <!--user promt modal start-->
+    <div class="modal fade modal-lg" id="product_promt_modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="promt_cog_load h-100 w-100" style="display: none; position: absolute;background: rgb(0, 0, 0, 0.1);z-index: 1;">
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i>
+                    </div>
+                </div>
+                <div class="modal-body px-5 pt-5">
+                    <div class="d-flex justify-content-between pb-3">
+                        <h4 class="action_title"></h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" id="serializeFormData">
+                        <div class="alert alert-warning promt_err_modal" style="display:none;" role="alert"></div>
+                        <div id="product_promt_data"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--user promt modal end-->
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -252,13 +275,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                                                         if ($product['status'] == 0) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch">
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>">
                                                             </div>
                                                         <?php
                                                         } else if ($product['status'] == 1) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch" checked>
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>" checked>
                                                             </div>
                                                         <?php
                                                         }
@@ -365,13 +388,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                                                         if ($product['status'] == 0) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch">
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>">
                                                             </div>
                                                         <?php
                                                         } else if ($product['status'] == 1) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch" checked>
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>" checked>
                                                             </div>
                                                         <?php
                                                         }
@@ -478,13 +501,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                                                         if ($product['status'] == 0) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch">
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>">
                                                             </div>
                                                         <?php
                                                         } else if ($product['status'] == 1) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch" checked>
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>" checked>
                                                             </div>
                                                         <?php
                                                         }
@@ -591,13 +614,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                                                         if ($product['status'] == 0) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch">
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>">
                                                             </div>
                                                         <?php
                                                         } else if ($product['status'] == 1) {
                                                         ?>
                                                             <div class="form-check form-switch" style="position: unset;">
-                                                                <input class="form-check-input" type="checkbox" id="mySwitch" checked>
+                                                                <input class="form-check-input" type="checkbox" id="mySwitch" uid="<?php echo $product['sku']; ?>" checked>
                                                             </div>
                                                         <?php
                                                         }
@@ -699,6 +722,86 @@ include "footer.php";
                 success: function(data) {
                     $(".cog_load").hide();
                     $(".err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+
+         //==== edit curiar data start ====
+
+        //show curiar data
+        $(document).on('click', '#editProduct', function(){
+            var uid = $(this).attr('uid');
+            console.log(uid);
+            
+            $(".action_title").html('Edit Product');
+            $("#product_promt_data").html("");
+            $("#product_promt_modal_data").modal('show');
+            $(".promt_cog_load").show();
+            $.ajax({
+                url: 'query/edit_product',
+                method: 'POST',
+                data: {"edit_product_promt":"edit_product_promt", "uid":uid},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $("#product_promt_data").html(data);
+                }
+            });
+        });
+
+        //save changes
+        $(document).on('click', "#edit_product_Data", function(){
+            const edit_courier_id = $("#edit_courier_id").val();
+            const edit_images       = $("#edit_images").val();
+            const edit_name    = $("#edit_name").val();
+            const edit_categories = $("#edit_categories").val();
+            const edit_weight = $("#edit_weight").val();
+            const edit_price = $("#edit_price").val();
+            
+            $.ajax({
+                url: "query/edit_product",
+                method: 'POST',
+                data: {"edit_product_changes": "edit_product_changes","edit_courier_id": edit_courier_id, "edit_images": edit_images, "edit_name": edit_name,
+                     "edit_categories": edit_categories, "edit_weight": edit_weight, "edit_price": edit_price},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $(".promt_err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+        //==== edit curiar data end ====
+
+        //delete customer data
+        $(document).on('click', "#deleteProduct", function(){
+            const uid = $(this).attr('uid');
+            $.ajax({
+                url: 'query/edit_product',
+                method: 'POST',
+                data: {"delete_product":"delete_product", "uid":uid},
+                success: function(data) {
+                    if (data === "success") {
+                        alert ("User deleted successfully !");
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+        });
+
+        //change status
+        $(document).on('click', "#mySwitch", function(){
+            const uid = $(this).attr('uid');
+            console.log(uid);
+            
+            $.ajax({
+                url: 'query/edit_product',
+                method: 'POST',
+                data: {"change_product_status":"change_product_status", "uid":uid},
+                success: function(data) {
+                    // if (data === "success") {
+                    //     alert ("status chenged successfully !");
+                    // } else {
+                    //     alert("status chenged failed");
+                    // }
                 }
             });
         });

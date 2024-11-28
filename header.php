@@ -112,7 +112,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             if (hasPermission($ac_username, $ac_user, "view_order", $conn)) {
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/orders?status=requested">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/orders?status=requested">
                                     <i class="fa fa-shopping-bag" aria-hidden="true"></i> <span data-key="t-dashboard">Orders</span>
                                 </a>
                             </li>
@@ -121,7 +121,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             if (hasPermission($ac_username, $ac_user, "view_product", $conn)) {
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/products">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/products">
                                     <i class="fa fa-cube" aria-hidden="true"></i> <span data-key="t-dashboard">Products</span>
                                 </a>
                             </li>
@@ -130,7 +130,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             if (hasPermission($ac_username, $ac_user, "view_customer", $conn)) {
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/customers">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/customers">
                                     <i class="fa fa-users" aria-hidden="true"></i> <span data-key="t-dashboard">Customers</span>
                                 </a>
                             </li>
@@ -139,7 +139,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             if (hasPermission($ac_username, $ac_user, "view_courier", $conn)) {
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/courier">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/courier">
                                     <i class="fa fa-truck" aria-hidden="true"></i> <span data-key="t-dashboard">Courier</span>
                                 </a>
                             </li>
@@ -157,13 +157,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             if (hasPermission($ac_username, $ac_user, "view_user", $conn)) {
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/user">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/user">
                                     <i class="fa fa-lock" aria-hidden="true"></i> <span data-key="t-dashboard">Access</span>
                                 </a>
                             </li>
                             <?php } ?>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="/logout">
+                                <a class="nav-link menu-link" href="/STEPUP_INV_14_11_2024/logout">
                                     <i class="fa fa-sign-out" aria-hidden="true"></i> <span data-key="t-logout">Logout</span>
                                 </a>
                             </li>

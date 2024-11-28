@@ -55,6 +55,29 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
     </div>
     <!--modal-->
     <?php } ?>
+    <!--user promt modal start-->
+    <div class="modal fade modal-lg" id="curier_promt_modal_data" aria-hidden="true" aria-labelledby="modalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0">
+                <div class="promt_cog_load h-100 w-100" style="display: none; position: absolute;background: rgb(0, 0, 0, 0.1);z-index: 1;">
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <i class="fa fa-cog fa-spin" style="font-size: 50px;"></i>
+                    </div>
+                </div>
+                <div class="modal-body px-5 pt-5">
+                    <div class="d-flex justify-content-between pb-3">
+                        <h4 class="action_title"></h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" id="serializeFormData">
+                        <div class="alert alert-warning promt_err_modal" style="display:none;" role="alert"></div>
+                        <div id="courier_promt_data"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--user promt modal end-->
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -123,13 +146,13 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                                                     if ($courier['status'] == 0) {
                                                     ?>
                                                         <div class="form-check form-switch" style="position: unset;">
-                                                            <input class="form-check-input" type="checkbox" id="mySwitch">
+                                                            <input class="form-check-input" uid="<?php echo $courier['c_id']; ?>" type="checkbox" id="mySwitch">
                                                         </div>
                                                     <?php
                                                     } else if ($courier['status'] == 1) {
                                                     ?>
                                                         <div class="form-check form-switch" style="position: unset;">
-                                                            <input class="form-check-input" type="checkbox" id="mySwitch" checked>
+                                                            <input class="form-check-input" uid="<?php echo $courier['c_id']; ?>" type="checkbox" id="mySwitch" checked>
                                                         </div>
                                                     <?php
                                                     }
@@ -194,6 +217,79 @@ include "footer.php";
                 success: function(data) {
                     $(".cog_load").hide();
                     $(".err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+
+        //==== edit curiar data start ====
+
+        //show curiar data
+        $(document).on('click', '#editCourier', function(){
+            var uid = $(this).attr('uid');
+            
+            $(".action_title").html('Edit Courier');
+            $("#courier_promt_data").html("");
+            $("#curier_promt_modal_data").modal('show');
+            $(".promt_cog_load").show();
+            $.ajax({
+                url: 'query/get_courier',
+                method: 'POST',
+                data: {"edit_curier_promt":"edit_curier_promt", "uid":uid},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $("#courier_promt_data").html(data);
+                }
+            });
+        });
+            //save changes
+            $(document).on('click', "#edit_courier_Data", function(){
+            const edit_id = $("#courier_id").val();
+            const edit_name       = $("#edit_name").val();
+            const edit_api_key    = $("#edit_api_key").val();
+            const edit_secret_key = $("#edit_secret_key").val();
+            
+            $.ajax({
+                url: "query/get_courier",
+                method: 'POST',
+                data: {"edit_courier_changes": "edit_courier_changes","edit_id":edit_id, "edit_name": edit_name, "edit_api_key": edit_api_key, "edit_secret_key": edit_secret_key},
+                success: function(data) {
+                    $(".promt_cog_load").hide();
+                    $(".promt_err_modal").fadeIn().delay(2000).fadeOut(2000).html(data);
+                }
+            });
+        });
+        //==== edit curiar data end ====
+
+        //delete customer data
+        $(document).on('click', "#deleteCourier", function(){
+            const uid = $(this).attr('uid');
+            $.ajax({
+                url: 'query/get_courier',
+                method: 'POST',
+                data: {"delete_courier":"delete_courier", "uid":uid},
+                success: function(data) {
+                    if (data === "success") {
+                        alert ("User deleted successfully !");
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+        });
+
+        //change status
+        $(document).on('click', "#mySwitch", function(){
+            const uid = $(this).attr('uid');
+            $.ajax({
+                url: 'query/get_courier',
+                method: 'POST',
+                data: {"change_status":"change_status", "uid":uid},
+                success: function(data) {
+                    // if (data === "success") {
+                    //     alert ("status chenged successfully !");
+                    // } else {
+                    //     alert("status chenged failed");
+                    // }
                 }
             });
         });
