@@ -61,7 +61,7 @@ if (isset($_SESSION['user_id']) and isset($_SESSION['user_name']) and isset($_SE
                             <button class="profile" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </button>
-                            <ul class="dropdown-menu" style="">
+                            <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item" href="/profile">
                                         <i class="fa fa-user pe-2"></i>
