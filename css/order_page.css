@@ -1,0 +1,93 @@
+/*order page css*/
+.info_area {
+    display: flex;
+    font-size: 17px;
+    color: #328ea2;
+}
+.phone_number {
+    background: #f3b35a;
+    padding: 5px;
+    font-size: 14px;
+}
+.copy_btn {
+    color: #278ea5;
+    font-weight: 600;
+    font-size: 20px;
+}
+.small_text {
+    font-size: 14px;
+}
+.check_box {
+    width: 8px;
+}
+.form-check-input {
+    padding: 7px;
+    border: 2px solid #7b7a7a;
+}
+.inv_area {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+/*no data message*/
+.cube_data {
+    font-size: 60px;
+}
+.loading_area>i {
+    margin-top: 10px;
+    font-size: 50px;
+    font-weight: 600;
+}
+.no_data {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/*order count*/
+.order_count {
+    display: flex;
+    justify-content: space-between;
+    color: black;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+}
+.order_count>span {
+    font-weight: 600;
+    padding: 1px 10px;
+    color: black;
+    background: #f2f2f2;
+    margin-left: 5px;
+}
+.order_count:hover {
+    border: 1px solid #dfdfdf;
+}
+.order_count:hover > span {
+    color: white;
+    background: #0f3e49;
+}
+
+/*active order count*/
+.ac_order_count {
+    display: flex;
+    justify-content: space-between;
+    color: black;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    background: #f1f7f9;
+}
+.ac_order_count>span {
+    font-weight: 600;
+    padding: 1px 10px;
+    background: #3a8fa1;
+    margin-left: 5px;
+    color: white;
+}
+
+.action_btn {
+  background: transparent;
+  border: 1px solid #e1dddd;
+}
+.action_btn:hover, .action_btn:focus {
+    border: 1px solid #328ea2;
+}
